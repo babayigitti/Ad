@@ -3848,7 +3848,8 @@
     </header>
 
     <!-- ================= SOL EKRAN: ETKİNLİKLER (ARKADAŞ DAVETİ & İÇERİK ÜRETİCİ) ================= -->
-    <div id="left-events-container" class="fixed left-3 sm:left-4 top-20 sm:top-24 z-25 pointer-events-auto flex flex-col items-start gap-2 select-none transition-all duration-300">
+    <div id="left-events-container" class="fixed left-3 sm:left-4 top-20 sm:top-24 z-25 pointer-events-none flex flex-col items-start gap-2 select-none transition-all duration-300">
+        <div class="pointer-events-auto flex flex-col items-start gap-2">
         <!-- 1. ARKADAŞ DAVET ETKİNLİĞİ WIDGET -->
         <div id="left-invite-event-widget" class="flex flex-col items-start">
             <!-- Genişletilmiş / Tam Kart Görünümü -->
@@ -3957,6 +3958,7 @@
                 <span class="font-io text-xs text-purple-200 stroke-text-dark">YAYINCI <span id="creator-badge-counter" class="text-pink-400">0/4</span></span>
                 <i class="fa-solid fa-chevron-right text-[10px] text-purple-300/70"></i>
             </button>
+        </div>
         </div>
     </div>
 
@@ -5731,14 +5733,85 @@
         ════════════════════════════════════════════════════════════════ */
         const ALL_MODALS = ['loginModal', 'registerModal', 'profileModal', 'settingsModal', 'serverModal', 'cosmeticsModal', 'shopModal', 'diamondPurchaseModal', 'leadersModal', 'challengesModal', 'dailyRewardModal', 'levelRewardsModal', 'partyModal', 'helpModal', 'newsModal', 'friendInviteModal', 'creatorEventModal'];
 
+        window.__forestbrawlModalLock = false;
+        window.__forestbrawlModalBurstLock = false;
+        window.__forestbrawlModalClickId = 0;
+        window.__forestbrawlModalOpenForClick = 0;
+        window.__forestbrawlModalLastHandledClickId = 0;
+
+        function registerMenuActionClick() {
+            const clickId = ++window.__forestbrawlModalClickId;
+            window.__forestbrawlModalOpenForClick = clickId;
+            setTimeout(() => {
+                if (window.__forestbrawlModalClickId === clickId) {
+                    window.__forestbrawlModalClickId = 0;
+                    window.__forestbrawlModalOpenForClick = 0;
+                    window.__forestbrawlModalLastHandledClickId = 0;
+                }
+            }, 260);
+            return clickId;
+        }
+
+        function wrapInlineMenuHandlers() {
+            document.querySelectorAll('[onclick]').forEach((node) => {
+                const code = node.getAttribute('onclick');
+                if (!code || !/(openModal\(|openFriendInviteModal|openCreatorEventModal|toggleInviteWidget|toggleCreatorWidget)/.test(code)) return;
+                node.setAttribute('onclick', `if (window.__forestbrawlModalClickId && window.__forestbrawlModalLastHandledClickId === window.__forestbrawlModalClickId) return; ${code}`);
+            });
+        }
+
+        document.addEventListener('click', (event) => {
+            if (!event || !event.target || !event.target.closest) return;
+            const trigger = event.target.closest('[onclick], button, .invite-banner-card, .creator-banner-card, .dock-btn, [data-modal-target]');
+            if (!trigger) return;
+
+            const clickId = registerMenuActionClick();
+            const modalId = resolveModalTriggerId(trigger);
+            if (!modalId) return;
+
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+
+            if (window.__forestbrawlModalBurstLock) return;
+            window.__forestbrawlModalBurstLock = true;
+            setTimeout(() => { window.__forestbrawlModalBurstLock = false; }, 220);
+
+            if (modalId === 'challengesModal') updateChallengeProgress();
+            if (modalId === 'dailyRewardModal') updateDailyRewardPanel();
+            if (modalId === 'leadersModal') loadLeaderboard();
+            if (modalId === 'friendInviteModal') updateFriendInviteModal();
+            if (modalId === 'creatorEventModal') {
+                setCreatorModalTab(_creatorEventTab || 'rewards');
+                selectCreatorPlatform(_creatorSelectedPlatform || 'tiktok');
+            }
+            if (modalId === 'profileModal') updateProfileModalData();
+            if (modalId === 'levelRewardsModal') updateLevelRewardsPanel();
+
+            openModal(modalId);
+            window.__forestbrawlModalOpenForClick = clickId;
+        }, true);
+
+        wrapInlineMenuHandlers();
+
         function openModal(id) {
             if (!id) return;
+            if (window.__forestbrawlModalLock) return;
+            const currentClickId = window.__forestbrawlModalClickId || 0;
+            if (currentClickId && window.__forestbrawlModalLastHandledClickId === currentClickId) return;
+            if (currentClickId) window.__forestbrawlModalLastHandledClickId = currentClickId;
+            window.__forestbrawlModalLock = true;
+            setTimeout(() => { window.__forestbrawlModalLock = false; }, 180);
+
             const target = document.getElementById(id);
             const overlay = document.getElementById('modalOverlay');
             if (!target || !overlay) return;
 
             const isAlreadyOpen = target.classList.contains('flex') || target.style.display === 'flex';
-            if (isAlreadyOpen) return;
+            if (isAlreadyOpen) {
+                window.__forestbrawlModalLock = false;
+                return;
+            }
 
             const activeId = window.__forestbrawlActiveModal;
             if (activeId && activeId !== id) {
@@ -5797,6 +5870,8 @@
                 if (el) { el.classList.add('hidden'); el.classList.remove('flex'); el.style.display = 'none'; }
             });
             window.__forestbrawlActiveModal = null;
+            window.__forestbrawlModalLock = false;
+            window.__forestbrawlModalBurstLock = false;
             _previewSkin = null;
             _previewWeapon = null;
             updateMainScreenCharacter();
