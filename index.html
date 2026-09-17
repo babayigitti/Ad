@@ -5738,18 +5738,6 @@
         window.__forestbrawlModalClickId = 0;
         window.__forestbrawlModalOpenForClick = 0;
         window.__forestbrawlModalLastHandledClickId = 0;
-        window.__forestbrawlSingleTapGuard = 0;
-
-        function armMenuActionGuard() {
-            const guardId = Date.now() + Math.random();
-            window.__forestbrawlSingleTapGuard = guardId;
-            setTimeout(() => {
-                if (window.__forestbrawlSingleTapGuard === guardId) {
-                    window.__forestbrawlSingleTapGuard = 0;
-                }
-            }, 260);
-            return guardId;
-        }
 
         function registerMenuActionClick() {
             const clickId = ++window.__forestbrawlModalClickId;
@@ -5764,27 +5752,8 @@
             return clickId;
         }
 
-        document.addEventListener('pointerdown', (event) => {
-            if (!event || !event.target || !event.target.closest) return;
-            const trigger = event.target.closest('[onclick], button, .invite-banner-card, .creator-banner-card, .dock-btn, [data-modal-target]');
-            if (!trigger) return;
-            if (window.__forestbrawlSingleTapGuard) {
-                event.preventDefault();
-                event.stopPropagation();
-                return;
-            }
-            armMenuActionGuard();
-        }, true);
-
         document.addEventListener('click', (event) => {
             if (!event || !event.target || !event.target.closest) return;
-            if (window.__forestbrawlSingleTapGuard) {
-                event.preventDefault();
-                event.stopPropagation();
-                event.stopImmediatePropagation();
-                return;
-            }
-
             const trigger = event.target.closest('[onclick], button, .invite-banner-card, .creator-banner-card, .dock-btn, [data-modal-target]');
             if (!trigger) return;
 
@@ -5817,7 +5786,6 @@
 
         function openModal(id) {
             if (!id) return;
-            if (window.__forestbrawlSingleTapGuard) return;
             if (window.__forestbrawlModalLock) return;
             const currentClickId = window.__forestbrawlModalClickId || 0;
             if (currentClickId && window.__forestbrawlModalLastHandledClickId === currentClickId) return;
@@ -8237,7 +8205,6 @@
         }
 
         function openFriendInviteModal() {
-            if (window.__forestbrawlSingleTapGuard) return;
             openModal('friendInviteModal');
             updateFriendInviteModal();
         }
@@ -8866,7 +8833,6 @@
         }
 
         function openCreatorEventModal() {
-            if (window.__forestbrawlSingleTapGuard) return;
             openModal('creatorEventModal');
             setCreatorModalTab(_creatorEventTab || 'rewards');
             selectCreatorPlatform(_creatorSelectedPlatform || 'tiktok');
