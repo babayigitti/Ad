@@ -5732,6 +5732,18 @@
         window.__forestbrawlModalClickId = 0;
         window.__forestbrawlModalOpenForClick = 0;
         window.__forestbrawlModalLastHandledClickId = 0;
+        window.__forestbrawlSingleTapGuard = 0;
+
+        function armMenuActionGuard() {
+            const guardId = Date.now() + Math.random();
+            window.__forestbrawlSingleTapGuard = guardId;
+            setTimeout(() => {
+                if (window.__forestbrawlSingleTapGuard === guardId) {
+                    window.__forestbrawlSingleTapGuard = 0;
+                }
+            }, 260);
+            return guardId;
+        }
 
         function registerMenuActionClick() {
             const clickId = ++window.__forestbrawlModalClickId;
@@ -5746,13 +5758,17 @@
             return clickId;
         }
 
-        function wrapInlineMenuHandlers() {
-            document.querySelectorAll('[onclick]').forEach((node) => {
-                const code = node.getAttribute('onclick');
-                if (!code || !/(openModal\(|openFriendInviteModal|openCreatorEventModal|toggleInviteWidget|toggleCreatorWidget)/.test(code)) return;
-                node.setAttribute('onclick', `if (window.__forestbrawlModalClickId && window.__forestbrawlModalLastHandledClickId === window.__forestbrawlModalClickId) return; ${code}`);
-            });
-        }
+        document.addEventListener('pointerdown', (event) => {
+            if (!event || !event.target || !event.target.closest) return;
+            const trigger = event.target.closest('[onclick], button, .invite-banner-card, .creator-banner-card, .dock-btn, [data-modal-target]');
+            if (!trigger) return;
+            if (window.__forestbrawlSingleTapGuard) {
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+            }
+            armMenuActionGuard();
+        }, true);
 
         function resolveModalTriggerId(node) {
             if (!node || !node.closest) return null;
@@ -5772,7 +5788,7 @@
 
         document.addEventListener('click', (event) => {
             if (!event || !event.target || !event.target.closest) return;
-            if (window.__forestbrawlModalBurstLock) {
+            if (window.__forestbrawlSingleTapGuard) {
                 event.preventDefault();
                 event.stopPropagation();
                 event.stopImmediatePropagation();
@@ -5790,6 +5806,7 @@
             event.stopPropagation();
             event.stopImmediatePropagation();
 
+            if (window.__forestbrawlModalBurstLock) return;
             window.__forestbrawlModalBurstLock = true;
             setTimeout(() => { window.__forestbrawlModalBurstLock = false; }, 220);
 
@@ -5808,10 +5825,9 @@
             window.__forestbrawlModalOpenForClick = clickId;
         }, true);
 
-        wrapInlineMenuHandlers();
-
         function openModal(id) {
             if (!id) return;
+            if (window.__forestbrawlSingleTapGuard) return;
             if (window.__forestbrawlModalLock) return;
             const currentClickId = window.__forestbrawlModalClickId || 0;
             if (currentClickId && window.__forestbrawlModalLastHandledClickId === currentClickId) return;
@@ -8231,6 +8247,7 @@
         }
 
         function openFriendInviteModal() {
+            if (window.__forestbrawlSingleTapGuard) return;
             openModal('friendInviteModal');
             updateFriendInviteModal();
         }
@@ -8859,6 +8876,7 @@
         }
 
         function openCreatorEventModal() {
+            if (window.__forestbrawlSingleTapGuard) return;
             openModal('creatorEventModal');
             setCreatorModalTab(_creatorEventTab || 'rewards');
             selectCreatorPlatform(_creatorSelectedPlatform || 'tiktok');
