@@ -5143,12 +5143,30 @@ window.addEventListener('wheel', (e) => {
   _userZoomMultiplier = Math.max(0.75, Math.min(1.35, _userZoomMultiplier + delta));
 }, { passive: true });
 
+function _isJoystickUiTouch(touch) {
+  if (!touch || typeof touch.clientX !== 'number' || typeof touch.clientY !== 'number') return false;
+  const uiIds = ['joy-left', 'joy-right', 'dash-btn', 'mobile-eat-btn'];
+  for (const id of uiIds) {
+    const el = document.getElementById(id);
+    if (!el) continue;
+    const rect = el.getBoundingClientRect();
+    const inside = touch.clientX >= rect.left && touch.clientX <= rect.right && touch.clientY >= rect.top && touch.clientY <= rect.bottom;
+    if (inside) return true;
+  }
+  return false;
+}
+
 // Mobile 2-finger pinch zoom support
 let _pinchStartDist = 0;
 let _pinchStartZoom = 1.0;
 window.addEventListener('touchstart', (e) => {
   if (e.touches && e.touches.length === 2) {
     const t0 = e.touches[0], t1 = e.touches[1];
+    if (_isJoystickUiTouch(t0) || _isJoystickUiTouch(t1)) {
+      _pinchStartDist = 0;
+      _pinchStartZoom = _userZoomMultiplier;
+      return;
+    }
     _pinchStartDist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
     _pinchStartZoom = _userZoomMultiplier;
   }
@@ -5157,6 +5175,10 @@ window.addEventListener('touchstart', (e) => {
 window.addEventListener('touchmove', (e) => {
   if (e.touches && e.touches.length === 2 && _pinchStartDist > 10) {
     const t0 = e.touches[0], t1 = e.touches[1];
+    if (_isJoystickUiTouch(t0) || _isJoystickUiTouch(t1)) {
+      _pinchStartDist = 0;
+      return;
+    }
     const curDist = Math.hypot(t0.clientX - t1.clientX, t0.clientY - t1.clientY);
     const scale = curDist / _pinchStartDist;
     _userZoomMultiplier = Math.max(0.75, Math.min(1.35, _pinchStartZoom * scale));
