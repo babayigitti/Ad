@@ -3575,7 +3575,6 @@
         /* Creator Event & Friend Invite Modalleri: Esnek Sütun & Görünür Sekmeler */
         #modalOverlay > #creatorEventModal,
         #modalOverlay > #friendInviteModal {
-            display: flex !important;
             flex-direction: column !important;
             max-height: min(92vh, 92dvh, 640px) !important;
             overflow: hidden !important;
@@ -3872,7 +3871,7 @@
                 </div>
 
                 <!-- Orta Bölüm: Canlı Karakter Görünümü & Teaser -->
-                <div data-modal-target="friendInviteModal" class="flex items-center gap-2.5 cursor-pointer hover:brightness-110 transition bg-black/35 p-1.5 rounded-xl border border-amber-500/20 z-10" role="button" tabindex="0" aria-label="Arkadaş davet etkinliğini aç">
+                <button type="button" data-modal-target="friendInviteModal" class="w-full text-left flex items-center gap-2.5 cursor-pointer hover:brightness-110 transition bg-black/35 p-1.5 rounded-xl border border-amber-500/20 z-10" aria-label="Arkadaş davet etkinliğini aç">
                     <!-- Canlı Ateş Büyücüsü Mini Canvas Önizlemesi -->
                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4a1804] to-[#1a0802] border-2 border-[#ff9d00] flex items-center justify-center relative overflow-hidden shadow-inner shrink-0">
                         <canvas id="invite-widget-mini-canvas" width="64" height="64" class="w-12 h-12 object-contain"></canvas>
@@ -3888,7 +3887,7 @@
                             <span id="invite-widget-progress-text" class="font-io text-[9px] text-amber-300">0/5</span>
                         </div>
                     </div>
-                </div>
+                </button>
 
                 <!-- Alt Eylem Butonu -->
                 <button type="button" data-modal-target="friendInviteModal" class="btn-3d btn-yellow w-full py-1.5 flex items-center justify-center gap-1.5 font-io text-xs stroke-text-dark rounded-xl shadow-lg z-10" title="Etkinliği Aç">
@@ -3926,7 +3925,7 @@
                 </div>
 
                 <!-- Orta Bölüm: Sosyal Medya İkonları & Teaser -->
-                <div data-modal-target="creatorEventModal" class="flex items-center gap-2 cursor-pointer hover:brightness-110 transition bg-black/40 p-1.5 rounded-xl border border-purple-500/25 z-10" role="button" tabindex="0" aria-label="İçerik üretici etkinliğini aç">
+                <button type="button" data-modal-target="creatorEventModal" class="w-full text-left flex items-center gap-2 cursor-pointer hover:brightness-110 transition bg-black/40 p-1.5 rounded-xl border border-purple-500/25 z-10" aria-label="İçerik üretici etkinliğini aç">
                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#3b0764] to-[#1e0538] border-2 border-[#c084fc] flex flex-col items-center justify-center relative overflow-hidden shadow-inner shrink-0 gap-0.5">
                         <div class="flex items-center gap-1.5">
                             <i class="fa-brands fa-tiktok text-[#00f2ea] text-xs"></i>
@@ -3943,7 +3942,7 @@
                             <span id="creator-widget-progress-text" class="font-io text-[9px] text-green-400">0/4 Kademe</span>
                         </div>
                     </div>
-                </div>
+                </button>
 
                 <!-- Alt Eylem Butonu -->
                 <button type="button" data-modal-target="creatorEventModal" class="btn-3d btn-purple w-full py-1.5 flex items-center justify-center gap-1.5 font-io text-xs stroke-text-dark rounded-xl shadow-lg z-10" title="İçerik Üretici Etkinliğini Aç">
@@ -4058,7 +4057,7 @@
             </div>
 
             <!-- 2. CANLI ETKİNLİK 1: ARKADAŞ DAVETİ -->
-            <div data-modal-target="friendInviteModal" class="invite-banner-card flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#ff9d00] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition" role="button" tabindex="0" aria-label="Arkadaş davet etkinliğini aç">
+            <button type="button" data-modal-target="friendInviteModal" class="invite-banner-card w-full text-left flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#ff9d00] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition" aria-label="Arkadaş davet etkinliğini aç">
                 <div class="invite-flame-glow pointer-events-none"></div>
                 <div class="flex items-center gap-2.5 z-10 min-w-0 flex-1">
                     <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#4a1804] to-[#1a0802] border-2 border-[#ff9d00] flex items-center justify-center shadow-inner shrink-0 relative">
@@ -4082,7 +4081,7 @@
             </div>
 
             <!-- 3. CANLI ETKİNLİK 2: İÇERİK ÜRETİCİ (TIKTOK/YT) -->
-            <div data-modal-target="creatorEventModal" class="creator-banner-card flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#a855f7] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition" role="button" tabindex="0" aria-label="İçerik üretici etkinliğini aç">
+            <button type="button" data-modal-target="creatorEventModal" class="creator-banner-card w-full text-left flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#a855f7] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition" aria-label="İçerik üretici etkinliğini aç">
                 <div class="creator-flame-glow pointer-events-none"></div>
                 <div class="flex items-center gap-2.5 z-10 min-w-0 flex-1">
                     <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#3b0764] to-[#1e0538] border-2 border-[#c084fc] flex items-center justify-center shadow-inner shrink-0 relative">
@@ -5735,36 +5734,21 @@
 
         window.__forestbrawlModalLock = false;
         window.__forestbrawlModalBurstLock = false;
-        window.__forestbrawlModalClickId = 0;
-        window.__forestbrawlModalOpenForClick = 0;
-        window.__forestbrawlModalLastHandledClickId = 0;
-
-        function registerMenuActionClick() {
-            const clickId = ++window.__forestbrawlModalClickId;
-            window.__forestbrawlModalOpenForClick = clickId;
-            setTimeout(() => {
-                if (window.__forestbrawlModalClickId === clickId) {
-                    window.__forestbrawlModalClickId = 0;
-                    window.__forestbrawlModalOpenForClick = 0;
-                    window.__forestbrawlModalLastHandledClickId = 0;
-                }
-            }, 260);
-            return clickId;
-        }
 
         function bindModalTrigger(el, modalId) {
             if (!el || !modalId || el.dataset.modalBound === 'true') return;
             el.dataset.modalBound = 'true';
-            el.addEventListener('click', (event) => {
-                if (!event || !event.target) return;
-                const clickId = registerMenuActionClick();
-                event.preventDefault();
-                event.stopPropagation();
-                event.stopImmediatePropagation();
+
+            const trigger = (event) => {
+                if (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+                }
 
                 if (window.__forestbrawlModalBurstLock) return;
                 window.__forestbrawlModalBurstLock = true;
-                setTimeout(() => { window.__forestbrawlModalBurstLock = false; }, 220);
+                setTimeout(() => { window.__forestbrawlModalBurstLock = false; }, 180);
 
                 if (modalId === 'challengesModal') updateChallengeProgress();
                 if (modalId === 'dailyRewardModal') updateDailyRewardPanel();
@@ -5778,8 +5762,15 @@
                 if (modalId === 'levelRewardsModal') updateLevelRewardsPanel();
 
                 openModal(modalId);
-                window.__forestbrawlModalOpenForClick = clickId;
-            }, { capture: false });
+            };
+
+            el.addEventListener('click', trigger, { passive: false });
+            el.addEventListener('keydown', (event) => {
+                if ((event.key === 'Enter' || event.key === ' ') && !event.defaultPrevented) {
+                    event.preventDefault();
+                    trigger(event);
+                }
+            }, { passive: false });
         }
 
         document.querySelectorAll('[data-modal-target]').forEach((el) => {
@@ -5788,22 +5779,12 @@
 
         function openModal(id) {
             if (!id) return;
-            if (window.__forestbrawlModalLock) return;
-            const currentClickId = window.__forestbrawlModalClickId || 0;
-            if (currentClickId && window.__forestbrawlModalLastHandledClickId === currentClickId) return;
-            if (currentClickId) window.__forestbrawlModalLastHandledClickId = currentClickId;
-            window.__forestbrawlModalLock = true;
-            setTimeout(() => { window.__forestbrawlModalLock = false; }, 180);
-
             const target = document.getElementById(id);
             const overlay = document.getElementById('modalOverlay');
             if (!target || !overlay) return;
 
             const isAlreadyOpen = target.classList.contains('flex') || target.style.display === 'flex';
-            if (isAlreadyOpen) {
-                window.__forestbrawlModalLock = false;
-                return;
-            }
+            if (isAlreadyOpen) return;
 
             const activeId = window.__forestbrawlActiveModal;
             if (activeId && activeId !== id) {
