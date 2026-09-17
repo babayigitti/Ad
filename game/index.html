@@ -3865,7 +3865,7 @@
                 </div>
 
                 <!-- Orta Bölüm: Canlı Karakter Görünümü & Teaser -->
-                <div onclick="openFriendInviteModal(); playSfx('click')" class="flex items-center gap-2.5 cursor-pointer hover:brightness-110 transition bg-black/35 p-1.5 rounded-xl border border-amber-500/20 z-10">
+                <div onclick="if (event && event.target && event.target.closest('button')) { event.stopPropagation(); return; } openFriendInviteModal(); playSfx('click')" class="flex items-center gap-2.5 cursor-pointer hover:brightness-110 transition bg-black/35 p-1.5 rounded-xl border border-amber-500/20 z-10">
                     <!-- Canlı Ateş Büyücüsü Mini Canvas Önizlemesi -->
                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4a1804] to-[#1a0802] border-2 border-[#ff9d00] flex items-center justify-center relative overflow-hidden shadow-inner shrink-0">
                         <canvas id="invite-widget-mini-canvas" width="64" height="64" class="w-12 h-12 object-contain"></canvas>
@@ -3919,7 +3919,7 @@
                 </div>
 
                 <!-- Orta Bölüm: Sosyal Medya İkonları & Teaser -->
-                <div onclick="openCreatorEventModal(); playSfx('click')" class="flex items-center gap-2 cursor-pointer hover:brightness-110 transition bg-black/40 p-1.5 rounded-xl border border-purple-500/25 z-10">
+                <div onclick="if (event && event.target && event.target.closest('button')) { event.stopPropagation(); return; } openCreatorEventModal(); playSfx('click')" class="flex items-center gap-2 cursor-pointer hover:brightness-110 transition bg-black/40 p-1.5 rounded-xl border border-purple-500/25 z-10">
                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#3b0764] to-[#1e0538] border-2 border-[#c084fc] flex flex-col items-center justify-center relative overflow-hidden shadow-inner shrink-0 gap-0.5">
                         <div class="flex items-center gap-1.5">
                             <i class="fa-brands fa-tiktok text-[#00f2ea] text-xs"></i>
@@ -4050,7 +4050,7 @@
             </div>
 
             <!-- 2. CANLI ETKİNLİK 1: ARKADAŞ DAVETİ -->
-            <div onclick="openFriendInviteModal(); playSfx('click')" class="invite-banner-card flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#ff9d00] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition">
+            <div onclick="if (event && event.target && event.target.closest('button')) { event.stopPropagation(); return; } openFriendInviteModal(); playSfx('click')" class="invite-banner-card flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#ff9d00] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition">
                 <div class="invite-flame-glow pointer-events-none"></div>
                 <div class="flex items-center gap-2.5 z-10 min-w-0 flex-1">
                     <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#4a1804] to-[#1a0802] border-2 border-[#ff9d00] flex items-center justify-center shadow-inner shrink-0 relative">
@@ -4074,7 +4074,7 @@
             </div>
 
             <!-- 3. CANLI ETKİNLİK 2: İÇERİK ÜRETİCİ (TIKTOK/YT) -->
-            <div onclick="openCreatorEventModal(); playSfx('click')" class="creator-banner-card flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#a855f7] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition">
+            <div onclick="if (event && event.target && event.target.closest('button')) { event.stopPropagation(); return; } openCreatorEventModal(); playSfx('click')" class="creator-banner-card flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#a855f7] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition">
                 <div class="creator-flame-glow pointer-events-none"></div>
                 <div class="flex items-center gap-2.5 z-10 min-w-0 flex-1">
                     <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#3b0764] to-[#1e0538] border-2 border-[#c084fc] flex items-center justify-center shadow-inner shrink-0 relative">
@@ -5734,6 +5734,16 @@
             const isAlreadyOpen = target.classList.contains('flex') || target.style.display === 'flex';
             if (isAlreadyOpen) return;
 
+            const activeId = window.__forestbrawlActiveModal;
+            if (activeId && activeId !== id) {
+                const current = document.getElementById(activeId);
+                if (current) {
+                    current.classList.add('hidden');
+                    current.classList.remove('flex');
+                    current.style.display = 'none';
+                }
+            }
+
             overlay.classList.remove('hidden');
             overlay.style.display = 'flex';
             ALL_MODALS.forEach(m => {
@@ -5743,6 +5753,7 @@
             target.classList.remove('hidden');
             target.classList.add('flex');
             target.style.display = 'flex';
+            window.__forestbrawlActiveModal = id;
             applyMainMenuLayout(window.__forestbrawlMainMenuLayout || null);
 
             if (id === 'leadersModal') loadLeaderboard();
@@ -5779,6 +5790,7 @@
                 const el = document.getElementById(m);
                 if (el) { el.classList.add('hidden'); el.classList.remove('flex'); el.style.display = 'none'; }
             });
+            window.__forestbrawlActiveModal = null;
             _previewSkin = null;
             _previewWeapon = null;
             updateMainScreenCharacter();
