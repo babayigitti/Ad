@@ -5733,21 +5733,6 @@
         window.__forestbrawlModalOpenForClick = 0;
         window.__forestbrawlModalLastHandledClickId = 0;
 
-        function resolveModalTriggerId(trigger) {
-            if (!trigger) return null;
-            if (trigger instanceof HTMLElement && trigger.dataset && trigger.dataset.modalTarget) {
-                return trigger.dataset.modalTarget;
-            }
-            const onclick = trigger.getAttribute ? trigger.getAttribute('onclick') : '';
-            if (typeof onclick === 'string') {
-                const match = onclick.match(/openModal\(['\"]([^'\"]+)['\"]\)/);
-                if (match) return match[1];
-                if (onclick.includes('openFriendInviteModal')) return 'friendInviteModal';
-                if (onclick.includes('openCreatorEventModal')) return 'creatorEventModal';
-            }
-            return null;
-        }
-
         function registerMenuActionClick() {
             const clickId = ++window.__forestbrawlModalClickId;
             window.__forestbrawlModalOpenForClick = clickId;
@@ -5761,37 +5746,39 @@
             return clickId;
         }
 
-        document.addEventListener('click', (event) => {
-            if (!event || !event.target || !event.target.closest) return;
-            const trigger = event.target.closest('[data-modal-target]');
-            if (!trigger) return;
+        function bindModalTrigger(el, modalId) {
+            if (!el || !modalId || el.dataset.modalBound === 'true') return;
+            el.dataset.modalBound = 'true';
+            el.addEventListener('click', (event) => {
+                if (!event || !event.target) return;
+                const clickId = registerMenuActionClick();
+                event.preventDefault();
+                event.stopPropagation();
+                event.stopImmediatePropagation();
 
-            const clickId = registerMenuActionClick();
-            const modalId = resolveModalTriggerId(trigger);
-            if (!modalId) return;
+                if (window.__forestbrawlModalBurstLock) return;
+                window.__forestbrawlModalBurstLock = true;
+                setTimeout(() => { window.__forestbrawlModalBurstLock = false; }, 220);
 
-            event.preventDefault();
-            event.stopPropagation();
-            event.stopImmediatePropagation();
+                if (modalId === 'challengesModal') updateChallengeProgress();
+                if (modalId === 'dailyRewardModal') updateDailyRewardPanel();
+                if (modalId === 'leadersModal') loadLeaderboard();
+                if (modalId === 'friendInviteModal') updateFriendInviteModal();
+                if (modalId === 'creatorEventModal') {
+                    setCreatorModalTab(_creatorEventTab || 'rewards');
+                    selectCreatorPlatform(_creatorSelectedPlatform || 'tiktok');
+                }
+                if (modalId === 'profileModal') updateProfileModalData();
+                if (modalId === 'levelRewardsModal') updateLevelRewardsPanel();
 
-            if (window.__forestbrawlModalBurstLock) return;
-            window.__forestbrawlModalBurstLock = true;
-            setTimeout(() => { window.__forestbrawlModalBurstLock = false; }, 220);
+                openModal(modalId);
+                window.__forestbrawlModalOpenForClick = clickId;
+            }, { capture: false });
+        }
 
-            if (modalId === 'challengesModal') updateChallengeProgress();
-            if (modalId === 'dailyRewardModal') updateDailyRewardPanel();
-            if (modalId === 'leadersModal') loadLeaderboard();
-            if (modalId === 'friendInviteModal') updateFriendInviteModal();
-            if (modalId === 'creatorEventModal') {
-                setCreatorModalTab(_creatorEventTab || 'rewards');
-                selectCreatorPlatform(_creatorSelectedPlatform || 'tiktok');
-            }
-            if (modalId === 'profileModal') updateProfileModalData();
-            if (modalId === 'levelRewardsModal') updateLevelRewardsPanel();
-
-            openModal(modalId);
-            window.__forestbrawlModalOpenForClick = clickId;
-        }, true);
+        document.querySelectorAll('[data-modal-target]').forEach((el) => {
+            bindModalTrigger(el, el.getAttribute('data-modal-target'));
+        });
 
         function openModal(id) {
             if (!id) return;
