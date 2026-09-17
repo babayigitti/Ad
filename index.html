@@ -3872,7 +3872,7 @@
                 </div>
 
                 <!-- Orta Bölüm: Canlı Karakter Görünümü & Teaser -->
-                <div onclick="if (event && event.target && event.target.closest('button')) { event.stopPropagation(); return; } openFriendInviteModal(); playSfx('click')" class="flex items-center gap-2.5 cursor-pointer hover:brightness-110 transition bg-black/35 p-1.5 rounded-xl border border-amber-500/20 z-10">
+                <div data-modal-target="friendInviteModal" class="flex items-center gap-2.5 cursor-pointer hover:brightness-110 transition bg-black/35 p-1.5 rounded-xl border border-amber-500/20 z-10" role="button" tabindex="0" aria-label="Arkadaş davet etkinliğini aç">
                     <!-- Canlı Ateş Büyücüsü Mini Canvas Önizlemesi -->
                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#4a1804] to-[#1a0802] border-2 border-[#ff9d00] flex items-center justify-center relative overflow-hidden shadow-inner shrink-0">
                         <canvas id="invite-widget-mini-canvas" width="64" height="64" class="w-12 h-12 object-contain"></canvas>
@@ -3891,7 +3891,7 @@
                 </div>
 
                 <!-- Alt Eylem Butonu -->
-                <button onclick="openFriendInviteModal(); playSfx('click')" class="btn-3d btn-yellow w-full py-1.5 flex items-center justify-center gap-1.5 font-io text-xs stroke-text-dark rounded-xl shadow-lg z-10" title="Etkinliği Aç">
+                <button type="button" data-modal-target="friendInviteModal" class="btn-3d btn-yellow w-full py-1.5 flex items-center justify-center gap-1.5 font-io text-xs stroke-text-dark rounded-xl shadow-lg z-10" title="Etkinliği Aç">
                     <i class="fa-solid fa-gift text-xs"></i>
                     <span>ÖDÜLLERİ GÖR</span>
                 </button>
@@ -3926,7 +3926,7 @@
                 </div>
 
                 <!-- Orta Bölüm: Sosyal Medya İkonları & Teaser -->
-                <div onclick="if (event && event.target && event.target.closest('button')) { event.stopPropagation(); return; } openCreatorEventModal(); playSfx('click')" class="flex items-center gap-2 cursor-pointer hover:brightness-110 transition bg-black/40 p-1.5 rounded-xl border border-purple-500/25 z-10">
+                <div data-modal-target="creatorEventModal" class="flex items-center gap-2 cursor-pointer hover:brightness-110 transition bg-black/40 p-1.5 rounded-xl border border-purple-500/25 z-10" role="button" tabindex="0" aria-label="İçerik üretici etkinliğini aç">
                     <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-[#3b0764] to-[#1e0538] border-2 border-[#c084fc] flex flex-col items-center justify-center relative overflow-hidden shadow-inner shrink-0 gap-0.5">
                         <div class="flex items-center gap-1.5">
                             <i class="fa-brands fa-tiktok text-[#00f2ea] text-xs"></i>
@@ -3946,7 +3946,7 @@
                 </div>
 
                 <!-- Alt Eylem Butonu -->
-                <button onclick="openCreatorEventModal(); playSfx('click')" class="btn-3d btn-purple w-full py-1.5 flex items-center justify-center gap-1.5 font-io text-xs stroke-text-dark rounded-xl shadow-lg z-10" title="İçerik Üretici Etkinliğini Aç">
+                <button type="button" data-modal-target="creatorEventModal" class="btn-3d btn-purple w-full py-1.5 flex items-center justify-center gap-1.5 font-io text-xs stroke-text-dark rounded-xl shadow-lg z-10" title="İçerik Üretici Etkinliğini Aç">
                     <i class="fa-solid fa-clapperboard text-xs"></i>
                     <span>VİDEO GÖNDER & ÖDÜL</span>
                 </button>
@@ -4058,7 +4058,7 @@
             </div>
 
             <!-- 2. CANLI ETKİNLİK 1: ARKADAŞ DAVETİ -->
-            <div onclick="if (event && event.target && event.target.closest('button')) { event.stopPropagation(); return; } openFriendInviteModal(); playSfx('click')" class="invite-banner-card flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#ff9d00] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition">
+            <div data-modal-target="friendInviteModal" class="invite-banner-card flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#ff9d00] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition" role="button" tabindex="0" aria-label="Arkadaş davet etkinliğini aç">
                 <div class="invite-flame-glow pointer-events-none"></div>
                 <div class="flex items-center gap-2.5 z-10 min-w-0 flex-1">
                     <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#4a1804] to-[#1a0802] border-2 border-[#ff9d00] flex items-center justify-center shadow-inner shrink-0 relative">
@@ -4082,7 +4082,7 @@
             </div>
 
             <!-- 3. CANLI ETKİNLİK 2: İÇERİK ÜRETİCİ (TIKTOK/YT) -->
-            <div onclick="if (event && event.target && event.target.closest('button')) { event.stopPropagation(); return; } openCreatorEventModal(); playSfx('click')" class="creator-banner-card flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#a855f7] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition">
+            <div data-modal-target="creatorEventModal" class="creator-banner-card flex items-center justify-between p-2.5 pr-3 rounded-2xl border-[2.5px] border-[#a855f7] shadow-2xl relative overflow-hidden group cursor-pointer hover:brightness-110 active:scale-[0.98] transition" role="button" tabindex="0" aria-label="İçerik üretici etkinliğini aç">
                 <div class="creator-flame-glow pointer-events-none"></div>
                 <div class="flex items-center gap-2.5 z-10 min-w-0 flex-1">
                     <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#3b0764] to-[#1e0538] border-2 border-[#c084fc] flex items-center justify-center shadow-inner shrink-0 relative">
@@ -5739,6 +5739,21 @@
         window.__forestbrawlModalOpenForClick = 0;
         window.__forestbrawlModalLastHandledClickId = 0;
 
+        function resolveModalTriggerId(trigger) {
+            if (!trigger) return null;
+            if (trigger instanceof HTMLElement && trigger.dataset && trigger.dataset.modalTarget) {
+                return trigger.dataset.modalTarget;
+            }
+            const onclick = trigger.getAttribute ? trigger.getAttribute('onclick') : '';
+            if (typeof onclick === 'string') {
+                const match = onclick.match(/openModal\(['\"]([^'\"]+)['\"]\)/);
+                if (match) return match[1];
+                if (onclick.includes('openFriendInviteModal')) return 'friendInviteModal';
+                if (onclick.includes('openCreatorEventModal')) return 'creatorEventModal';
+            }
+            return null;
+        }
+
         function registerMenuActionClick() {
             const clickId = ++window.__forestbrawlModalClickId;
             window.__forestbrawlModalOpenForClick = clickId;
@@ -5754,7 +5769,7 @@
 
         document.addEventListener('click', (event) => {
             if (!event || !event.target || !event.target.closest) return;
-            const trigger = event.target.closest('[onclick], button, .invite-banner-card, .creator-banner-card, .dock-btn, [data-modal-target]');
+            const trigger = event.target.closest('[data-modal-target]');
             if (!trigger) return;
 
             const clickId = registerMenuActionClick();
